@@ -6,9 +6,13 @@ extends CharacterBody3D
 @export var move_speed := 3.0
 @export var forward_speed := 5.0
 @export var jump_velocity := 4.5
+@onready var skin: SkinController = $Skin
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var jump_buffered := false
+
+func _ready() -> void:
+	skin.set_animation("walk")
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed(&"reset_position"):
