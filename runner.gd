@@ -6,6 +6,9 @@ extends CharacterBody3D
 @export var move_speed := 3.0
 @export var forward_speed := 5.0
 @export var jump_velocity := 4.5
+@export var max_tilt_deg := 20.0
+@export var tilt_speed := 8.0
+
 @onready var skin: SkinController = $Skin
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -40,5 +43,12 @@ func _physics_process(delta: float) -> void:
 	velocity.x *= exp(-ground_damping * delta)
 	# Constant forward
 	velocity.z = -forward_speed
-
+	
+	# skin rotation stuff
+	var target_yaw := -deg_to_rad(axis * max_tilt_deg)
+	skin.rotation.y = lerp_angle(
+		skin.rotation.y,
+		target_yaw,
+		tilt_speed * delta
+	)
 	move_and_slide()
