@@ -6,7 +6,7 @@ extends CharacterBody3D
 @export var move_speed := 3.0
 @export var forward_speed := 5.0
 @export var jump_velocity := 4.5
-@export var max_tilt_deg := 20.0
+@export var max_tilt_deg := 30.0
 @export var tilt_speed := 8.0
 
 @onready var skin: SkinController = $Skin

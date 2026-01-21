@@ -7,7 +7,6 @@
 
 [node name="Runner" type="CharacterBody3D"]
 script = ExtResource("1_m3p76")
-max_tilt_deg = 30.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_m3p76")
