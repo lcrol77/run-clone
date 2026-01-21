@@ -38,7 +38,6 @@ func _physics_process(delta: float) -> void:
 	var target_x := axis * move_speed
 	velocity.x += target_x
 	velocity.x *= exp(-ground_damping * delta)
-
 	# Constant forward
 	velocity.z = -forward_speed
 
