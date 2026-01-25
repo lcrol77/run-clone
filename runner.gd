@@ -23,7 +23,6 @@ var jump_buffered := false
 func _ready() -> void:
 	skin.set_animation("walk")
 
-
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed(&"reset_position"):
 		_reset_runner()
@@ -45,30 +44,28 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-
-# ----------------------------
-# Movement pieces
-# ----------------------------
-
 func _apply_gravity(delta: float) -> void:
 	if not is_on_floor():
 		# same as your original: velocity += (-up_direction) * gravity * delta
 		velocity += (-up_direction) * gravity * delta
 
-
 func _handle_jump() -> void:
+	var cfg := _lateral_config()
 	if jump_buffered and is_on_floor():
-		velocity.y = jump_velocity
+		# jump vector is in the opposite direction of the current axis
+		match  cfg.axis:
+			AxisIndex.X:
+				velocity.y = jump_velocity * cfg.multiplier
+			AxisIndex.Y:
+				velocity.x = jump_velocity * -cfg.multiplier
 	jump_buffered = false
-
 
 func _apply_forward() -> void:
 	velocity.z = -forward_speed
 
-
 func _apply_lateral(input_axis: float, delta: float) -> void:
 	var cfg := _lateral_config()
-	var target : float = input_axis * move_speed * cfg.sign
+	var target : float = input_axis * move_speed * cfg.multiplier
 
 	# mutate the correct component
 	match cfg.axis:
@@ -81,15 +78,10 @@ func _apply_lateral(input_axis: float, delta: float) -> void:
 
 	_apply_forward()
 
-
 func _apply_skin_tilt(input_axis: float, delta: float) -> void:
 	var target_yaw := -deg_to_rad(input_axis * max_tilt_deg)
 	skin.rotation.y = lerp_angle(skin.rotation.y, target_yaw, tilt_speed * delta)
 
-
-# ----------------------------
-# Rotation pieces
-# ----------------------------
 
 func _try_wall_rotate(input_axis: float) -> void:
 	if rotate_lock > 0.0:
@@ -114,13 +106,6 @@ func _rotate_90(s: int) -> void:
 	up_direction = new_up
 
 
-# ----------------------------
-# Orientation logic (centralized)
-# ----------------------------
-
-# Returns:
-# - axis: which velocity component we treat as "lateral"
-# - sign: multiplier for inversion
 func _lateral_config() -> Dictionary:
 	# Use dot checks instead of exact float equality.
 	# "Up is mostly X" means we are on a wall where up_direction points ±X.
@@ -140,12 +125,7 @@ func _lateral_config() -> Dictionary:
 	if up_x > 0.5 or up_y < -0.5:
 		s = -1
 
-	return { "axis": axis, "sign": s }
-
-
-# ----------------------------
-# Misc
-# ----------------------------
+	return { "axis": axis, "multiplier": s }
 
 func _reset_runner() -> void:
 	global_position = Vector3(0, 1, 0)
