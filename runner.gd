@@ -53,18 +53,18 @@ func _rotate_90(s: int) -> void:
 	up_direction = new_up
 
 func  _handle_jump() -> void:
-		if jump_buffered and is_on_floor():
-			velocity.y = jump_velocity
-		jump_buffered = false
+	if jump_buffered and is_on_floor():
+		velocity.y = jump_velocity
+	jump_buffered = false
 	
 
 func _handle_skin_rotation(axis: float, delta:float)->void:
-		var target_yaw := -deg_to_rad(axis * max_tilt_deg)
-		skin.rotation.y = lerp_angle(
-			skin.rotation.y,
-			target_yaw,
-			tilt_speed * delta
-		)
+	var target_yaw := -deg_to_rad(axis * max_tilt_deg)
+	skin.rotation.y = lerp_angle(
+		skin.rotation.y,
+		target_yaw,
+		tilt_speed * delta
+	)
 
 func _handle_wall_rotation(axis) -> void:
 	if rotate_lock <= 0.0:
@@ -79,8 +79,16 @@ func _handle_wall_rotation(axis) -> void:
 # because I am sliding in the +/- X when  my up_direction is (0,1,0) and +/- Y 
 # when it is (1,0,0)
 func _handle_movement(axis: float, delta:float) -> void:
-		var target := axis * move_speed
-		velocity.x += target
-		velocity.x *= exp(-ground_damping * delta)
-		# Constant forward
-		velocity.z = -forward_speed
+	var axis_of_movement := _get_current_axis_of_movement()
+	var target := axis * move_speed
+	velocity[axis_of_movement] += target
+	velocity[axis_of_movement] *= exp(-ground_damping * delta)
+	# Constant forward
+	velocity.z = -forward_speed
+
+func _get_current_axis_of_movement() -> String:
+	if up_direction.x == 1 or up_direction.x == -1:
+		return "y"
+	if up_direction.y == 1 or up_direction.y == -1:
+		return "x" 
+	return "x"
