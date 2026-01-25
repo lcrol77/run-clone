@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cpx3tole2nl01"]
 
-[ext_resource type="Script" uid="uid://pa1luruvvmuu" path="res://runner.gd" id="1_m3p76"]
-[ext_resource type="PackedScene" uid="uid://diqv2vxpemt61" path="res://skin.tscn" id="2_f7b3c"]
+[ext_resource type="Script" uid="uid://pa1luruvvmuu" path="res://runner/runner.gd" id="1_m3p76"]
+[ext_resource type="PackedScene" uid="uid://diqv2vxpemt61" path="res://runner/skin.tscn" id="2_f7b3c"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m3p76"]
 

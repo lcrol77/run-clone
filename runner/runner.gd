@@ -118,9 +118,6 @@ func _lateral_config() -> Dictionary:
 	else:
 		axis = AxisIndex.X
 
-	# Preserve your intent: sometimes left/right should invert depending on orientation.
-	# Your original condition was: if up_direction.x == 1 or up_direction.y == -1 => -1 else +1.
-	# We'll express the same idea with dot products.
 	var s := 1
 	if up_x > 0.5 or up_y < -0.5:
 		s = -1
