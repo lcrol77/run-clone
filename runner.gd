@@ -80,7 +80,7 @@ func _handle_wall_rotation(axis) -> void:
 # when it is (1,0,0)
 func _handle_movement(axis: float, delta:float) -> void:
 	var axis_of_movement := _get_current_axis_of_movement()
-	var target := axis * move_speed
+	var target := axis * move_speed * _is_inverted_multiplier()
 	velocity[axis_of_movement] += target
 	velocity[axis_of_movement] *= exp(-ground_damping * delta)
 	# Constant forward
@@ -92,3 +92,9 @@ func _get_current_axis_of_movement() -> String:
 	if up_direction.y == 1 or up_direction.y == -1:
 		return "x" 
 	return "x"
+
+func _is_inverted_multiplier() -> int:
+	print(up_direction)
+	if up_direction.x == 1 or up_direction.y == -1:
+		return -1
+	return 1
